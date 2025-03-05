@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,15 +7,13 @@ public class PlaneVisualizer : MonoBehaviour
     [SerializeField] private Transform b;
     [SerializeField] private Transform c;
 
-    [SerializeField] private Transform pointPrefab;
-
     [SerializeField] private float sampleRate = 40f;
     
-    private readonly List<Transform> _generatedPoints = new();
+    private readonly List<GameObject> _generatedPoints = new();
 
     private void Start()
     {
-        GeneratePlane();
+        Generate();
     }
 
     private void Update()
@@ -24,11 +21,11 @@ public class PlaneVisualizer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             CleanUp();
-            GeneratePlane();
+            Generate();
         }
     }
 
-    private void GeneratePlane()
+    private void Generate()
     {
         var v = b.position - a.position;
         var u = c.position - a.position;
@@ -37,8 +34,9 @@ public class PlaneVisualizer : MonoBehaviour
         {
             for (var s = 0f; s < 1f || Mathf.Approximately(s, 1f); s += 1f / sampleRate)
             {
-                var point = a.position + v * t + u * s;
-                _generatedPoints.Add(Instantiate(pointPrefab, point, Quaternion.identity));
+                var pointPosition = a.position + v * t + u * s;
+                var point = VisualizerUtils.CreatePoint(pointPosition);
+                _generatedPoints.Add(point);
             }
         }
     }
@@ -47,7 +45,7 @@ public class PlaneVisualizer : MonoBehaviour
     {
         foreach (var point in _generatedPoints)
         {
-            Destroy(point.gameObject);
+            Destroy(point);
         }
         
         _generatedPoints.Clear();
