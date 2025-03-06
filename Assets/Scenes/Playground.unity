@@ -637,7 +637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cff9b15b7ca47c988c8571f8c075e44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shape: {fileID: 0}
+  shape: {fileID: 11400000, guid: 97f41584a6b20442e9a887bf8babae3c, type: 2}
   sampleRate: 40
 --- !u!1 &2123316044
 GameObject:

@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Utility;
 
 namespace Visualization
 {
@@ -9,8 +9,6 @@ namespace Visualization
     {
         [SerializeField] private ShapeAsset shape;
         [SerializeField] private float sampleRate = 40f;
-
-        private readonly List<GameObject> _generatedPoints = new();
 
         private void Update()
         {
@@ -31,20 +29,19 @@ namespace Visualization
             }
             
             var points = shape.Sample(sampleRate);
+            var pointNumber = 1;
+            
             foreach (var pointObject in points.Select(CreatePoint))
             {
-                _generatedPoints.Add(pointObject);
+                pointObject.transform.SetParent(transform, true);
+                pointObject.name = $"Point {pointNumber}";
+                pointNumber++;
             }
         }
 
         private void CleanUp()
         {
-            foreach (var point in _generatedPoints)
-            {
-                Destroy(point);
-            }
-
-            _generatedPoints.Clear();
+            transform.DestroyAllChildren();
         }
         
         private static GameObject CreatePoint(Vector3 position)
