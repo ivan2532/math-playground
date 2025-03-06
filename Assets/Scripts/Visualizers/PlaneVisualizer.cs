@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Plane = Geometry.Plane;
 
 namespace Visualizers
 {
@@ -10,7 +12,7 @@ namespace Visualizers
         [SerializeField] private Transform c;
 
         [SerializeField] private float sampleRate = 40f;
-    
+
         private readonly List<GameObject> _generatedPoints = new();
 
         private void Start()
@@ -20,26 +22,23 @@ namespace Visualizers
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                CleanUp();
-                Generate();
-            }
+            if (Input.GetKeyDown(KeyCode.Space)) Regenerate();
+        }
+
+        private void Regenerate()
+        {
+            CleanUp();
+            Generate();
         }
 
         private void Generate()
         {
-            var v = b.position - a.position;
-            var u = c.position - a.position;
-
-            for (var t = 0f; t < 1f || Mathf.Approximately(t, 1f); t += 1f / sampleRate)
+            var plane = new Plane(a.position, b.position, c.position);
+            var points = plane.Sample(sampleRate);
+            
+            foreach (var pointObject in points.Select(VisualizerUtils.CreatePoint))
             {
-                for (var s = 0f; s < 1f || Mathf.Approximately(s, 1f); s += 1f / sampleRate)
-                {
-                    var pointPosition = a.position + v * t + u * s;
-                    var point = VisualizerUtils.CreatePoint(pointPosition);
-                    _generatedPoints.Add(point);
-                }
+                _generatedPoints.Add(pointObject);
             }
         }
 
@@ -49,7 +48,7 @@ namespace Visualizers
             {
                 Destroy(point);
             }
-        
+
             _generatedPoints.Clear();
         }
     }
