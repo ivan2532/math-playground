@@ -10,6 +10,6 @@ namespace Visualization
         [SerializeField] private Vector3 a;
         [SerializeField] private Vector3 b;
         
-        protected override IShape Shape => new Ray(a, b);
+        protected override IShape Shape => new Ray(new TwoPointLineDescriptor(a, b));
     }
 }

@@ -9,6 +9,6 @@ namespace Visualization
         [SerializeField] private Vector3 a;
         [SerializeField] private Vector3 b;
         
-        protected override IShape Shape => new LineSegment(a, b);
+        protected override IShape Shape => new LineSegment(new TwoPointLineDescriptor(a, b));
     }
 }

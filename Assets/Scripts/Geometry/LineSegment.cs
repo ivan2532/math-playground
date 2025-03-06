@@ -3,27 +3,17 @@ using UnityEngine;
 
 namespace Geometry
 {
-    public class LineSegment : IShape
+    public class LineSegment : LineBase
     {
-        private readonly Vector3 _a;
-        private readonly Vector3 _v;
+        protected override float NormalizedStart => 0f;
+        protected override float NormalizedEnd => 1f;
         
-        public LineSegment(Vector3 a, Vector3 b)
+        public LineSegment(TwoPointLineDescriptor descriptor) : base(descriptor)
         {
-            _a = a;
-            _v = b - a;
         }
 
-        public List<Vector3> Sample(float rate)
+        public LineSegment(StartAndDirectionLineDescriptor descriptor) : base(descriptor)
         {
-            var points = new List<Vector3>();
-            
-            for (var t = 0f; t <= 1f; t += 1f / rate)
-            {
-                points.Add(_a + _v * t);
-            }
-
-            return points;
         }
     }
 }

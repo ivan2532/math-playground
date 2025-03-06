@@ -1,31 +1,18 @@
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace Geometry
 {
-    public class Ray : IShape
+    public class Ray : LineBase
     {
-        private readonly Vector3 _a;
-        private readonly Vector3 _v;
-
+        protected override float NormalizedStart => 0f;
+        protected override float NormalizedEnd => Infinity;
+        
         private const float Infinity = 10f;
         
-        public Ray(Vector3 a, Vector3 b)
+        public Ray(TwoPointLineDescriptor descriptor) : base(descriptor)
         {
-            _a = a;
-            _v = b - a;
         }
 
-        public List<Vector3> Sample(float rate)
+        public Ray(StartAndDirectionLineDescriptor descriptor) : base(descriptor)
         {
-            var points = new List<Vector3>();
-            
-            for (var t = 0f; t <= Infinity; t += 1f / rate)
-            {
-                points.Add(_a + _v * t);
-            }
-
-            return points;
         }
     }
 }
