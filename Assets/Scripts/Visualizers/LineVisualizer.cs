@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Geometry;
 using UnityEngine;
+using Ray = Geometry.Ray;
 
 namespace Visualizers
 {
@@ -14,9 +16,6 @@ namespace Visualizers
         [SerializeField] private float sampleRate = 5f;
     
         private readonly List<GameObject> _generatedPoints = new();
-
-        private const float MinusInfinity = -10f;
-        private const float PlusInfinity = 10f;
     
         private void Start()
         {
@@ -25,11 +24,13 @@ namespace Visualizers
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                CleanUp();
-                Generate();
-            }
+            if (Input.GetKeyDown(KeyCode.Space)) Regenerate();
+        }
+
+        private void Regenerate()
+        {
+            CleanUp();
+            Generate();
         }
 
         private void Generate()
@@ -52,28 +53,34 @@ namespace Visualizers
 
         private void GenerateLine()
         {
-            GenerateCustomLine(MinusInfinity, PlusInfinity);
+            var line = new Line(a.position, b.position);
+            var points = line.Sample(sampleRate);
+            
+            foreach (var pointObject in points.Select(VisualizerUtils.CreatePoint))
+            {
+                _generatedPoints.Add(pointObject);
+            }
         }
 
         private void GenerateRay()
         {
-            GenerateCustomLine(0f, PlusInfinity);
+            var line = new Ray(a.position, b.position);
+            var points = line.Sample(sampleRate);
+            
+            foreach (var pointObject in points.Select(VisualizerUtils.CreatePoint))
+            {
+                _generatedPoints.Add(pointObject);
+            }
         }
 
         private void GenerateLineSegment()
         {
-            GenerateCustomLine(0f, 1f);
-        }
-
-        private void GenerateCustomLine(float normalizedStart, float normalizedEnd)
-        {
-            var v = b.position - a.position;
-        
-            for (var t = normalizedStart; t <= normalizedEnd; t += 1f / sampleRate)
+            var line = new LineSegment(a.position, b.position);
+            var points = line.Sample(sampleRate);
+            
+            foreach (var pointObject in points.Select(VisualizerUtils.CreatePoint))
             {
-                var pointPosition = a.position + v * t;
-                var point = VisualizerUtils.CreatePoint(pointPosition);
-                _generatedPoints.Add(point);
+                _generatedPoints.Add(pointObject);
             }
         }
 
