@@ -1,24 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Plane = Geometry.Plane;
 
-namespace Visualizers
+namespace Visualization
 {
-    public class PlaneVisualizer : MonoBehaviour
+    public class Visualizer : MonoBehaviour
     {
-        [SerializeField] private Transform a;
-        [SerializeField] private Transform b;
-        [SerializeField] private Transform c;
-
+        [SerializeField] private ShapeAsset shape;
         [SerializeField] private float sampleRate = 40f;
 
         private readonly List<GameObject> _generatedPoints = new();
-
-        private void Start()
-        {
-            Generate();
-        }
 
         private void Update()
         {
@@ -33,10 +25,13 @@ namespace Visualizers
 
         private void Generate()
         {
-            var plane = new Plane(a.position, b.position, c.position);
-            var points = plane.Sample(sampleRate);
+            if (shape == null)
+            {
+                throw new ArgumentNullException(nameof(shape));
+            }
             
-            foreach (var pointObject in points.Select(VisualizerUtils.CreatePoint))
+            var points = shape.Sample(sampleRate);
+            foreach (var pointObject in points.Select(CreatePoint))
             {
                 _generatedPoints.Add(pointObject);
             }
@@ -50,6 +45,13 @@ namespace Visualizers
             }
 
             _generatedPoints.Clear();
+        }
+        
+        private static GameObject CreatePoint(Vector3 position)
+        {
+            var pointObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            pointObject.transform.position = position;
+            return pointObject;
         }
     }
 }

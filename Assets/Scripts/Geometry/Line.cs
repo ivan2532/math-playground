@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Geometry
 {
-    public class Line
+    public class Line : IShape
     {
         private readonly Vector3 _a;
         private readonly Vector3 _v;

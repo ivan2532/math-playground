@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Geometry
 {
-    public class Plane
+    public class Plane : IShape
     {
         private readonly Vector3 _a;
         private readonly Vector3 _u;
