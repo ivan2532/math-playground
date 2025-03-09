@@ -7,10 +7,11 @@ namespace Visualization
     [CreateAssetMenu(fileName = "Plane", menuName = "Shapes/Plane")]
     public class PlaneAsset : ShapeAsset
     {
-        [SerializeField] private Vector3 a;
-        [SerializeField] private Vector3 b;
-        [SerializeField] private Vector3 c;
-        
-        protected override IShape Shape => new Plane(a, b, c);
+        [field: SerializeField] public Vector3 A { get; private set; }
+        [field: SerializeField] public Vector3 B { get; private set; }
+        [field: SerializeField] public Vector3 C { get; private set; }
+
+        public override IShape Shape => Plane;
+        public Plane Plane => new(A, B, C);
     }
 }

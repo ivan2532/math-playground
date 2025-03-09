@@ -6,7 +6,7 @@ namespace Visualization
 {
     public abstract class ShapeAsset : ScriptableObject
     {
-        protected abstract IShape Shape { get; }
+        public abstract IShape Shape { get; }
 
         public List<Vector3> Sample(float rate)
         {
