@@ -12,5 +12,13 @@ namespace Geometry
         public LineSegment(StartAndDirectionLineDescriptor descriptor) : base(descriptor)
         {
         }
+
+        public override LineIntersectionResult IntersectsAt(LineBase other)
+        {
+            var result =  base.IntersectsAt(other);
+            if (result == null) return null;
+            
+            return result.T is < 0f or > 1f || result.S is < 0f or > 1f ? null : result;
+        }
     }
 }

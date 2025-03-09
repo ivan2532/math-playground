@@ -14,5 +14,13 @@ namespace Geometry
         public Ray(StartAndDirectionLineDescriptor descriptor) : base(descriptor)
         {
         }
+
+        public override LineIntersectionResult IntersectsAt(LineBase other)
+        {
+            var result =  base.IntersectsAt(other);
+            if (result == null) return null;
+            
+            return result.T < 0f ? null : result;
+        }
     }
 }

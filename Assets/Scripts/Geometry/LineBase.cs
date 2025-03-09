@@ -36,5 +36,29 @@ namespace Geometry
 
             return points;
         }
+
+        [CanBeNull]
+        public virtual LineIntersectionResult IntersectsAt(LineBase other)
+        {
+            var c = other.A - A;
+            var planeNormal = Vector3.Cross(V, other.V);
+
+            var parallelLines = planeNormal == Vector3.zero;
+            if (parallelLines) return null;
+
+            var coplanarLines = Vector3.Dot(c, planeNormal) == 0f;
+            if (!coplanarLines) return null;
+
+            var vPerp = V.GetPerpendicularVector(planeNormal);
+            var uPerp = other.V.GetPerpendicularVector(planeNormal);
+
+            var tDivider = Vector3.Dot(uPerp, V);
+            var sDivider = -Vector3.Dot(vPerp, other.V);
+
+            var t = Vector3.Dot(uPerp, c) / tDivider;
+            var s = Vector3.Dot(vPerp, c) / sDivider;
+
+            return new LineIntersectionResult(A + V * t, t, s);
+        }
     }
 }
