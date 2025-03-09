@@ -5,7 +5,7 @@ using Utility;
 
 namespace Visualization
 {
-    public class Visualizer : MonoBehaviour
+    public class ShapeSampler : MonoBehaviour
     {
         [SerializeField] private ShapeAsset shape;
         [SerializeField] private float sampleRate = 40f;
