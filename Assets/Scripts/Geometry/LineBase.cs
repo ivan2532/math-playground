@@ -1,37 +1,37 @@
 ﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
+using Utility;
 
 namespace Geometry
 {
     public abstract class LineBase : IShape
     {
+        public readonly Vector3 A;
+        public readonly Vector3 V;
+
         protected abstract float NormalizedStart { get; }
         protected abstract float NormalizedEnd { get; }
-        
-        private readonly Vector3 _a;
-        private readonly Vector3 _v;
-
-        private const float Infinity = 10f;
 
         protected LineBase(TwoPointLineDescriptor descriptor)
         {
-            _a = descriptor.A;
-            _v = descriptor.B - descriptor.A;
+            A = descriptor.A;
+            V = descriptor.B - descriptor.A;
         }
-        
+
         protected LineBase(StartAndDirectionLineDescriptor descriptor)
         {
-            _a = descriptor.A;
-            _v = descriptor.V;
+            A = descriptor.A;
+            V = descriptor.V;
         }
 
         public List<Vector3> Sample(float rate)
         {
             var points = new List<Vector3>();
-            
+
             for (var t = NormalizedStart; t <= NormalizedEnd; t += 1f / rate)
             {
-                points.Add(_a + _v * t);
+                points.Add(A + V * t);
             }
 
             return points;
