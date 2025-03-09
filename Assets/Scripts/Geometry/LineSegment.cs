@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace Geometry
 {
     public class LineSegment : LineBase
