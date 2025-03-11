@@ -5,15 +5,17 @@ namespace Geometry
 {
     public class Plane : IShape
     {
-        private readonly Vector3 _a;
-        private readonly Vector3 _u;
-        private readonly Vector3 _v;
+        public readonly Vector3 A;
+        public readonly Vector3 U;
+        public readonly Vector3 V;
+        
+        public Vector3 Normal => Vector3.Cross(U, V).normalized;
         
         public Plane(Vector3 a, Vector3 b, Vector3 c)
         {
-            _a = a;
-            _v = b - a;
-            _u = c - a;
+            A = a;
+            V = b - a;
+            U = c - a;
         }
 
         public List<Vector3> Sample(float rate)
@@ -24,7 +26,7 @@ namespace Geometry
             {
                 for (var s = 0f; s < 1f || Mathf.Approximately(s, 1f); s += 1f / rate)
                 {
-                    points.Add(_a + _v * t + _u * s);
+                    points.Add(A + V * t + U * s);
                 }
             }
 
